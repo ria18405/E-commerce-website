@@ -125,6 +125,7 @@ public class Mercury {
 
                     c_req.Transaction(al_customer);
                     
+                    
             }
             else if(choice_work==3){
                 //reward
@@ -157,7 +158,7 @@ public class Mercury {
         return;
         }
         else if(num==1){
-            System.out.println("CHOOSE YOUR MERCHANT\n"+"1) Voldemort\n"+"2) Bellatrix\n"+"3) Umbridge\n"+"4) Malfoy\n"+"5) Nagini\n");
+            System.out.println("CHOOSE YOUR MERCHANT\n"+"1) Voldemort\n"+"2) Bellatrix\n"+"3) Umbridge\n"+"4) Malfoy\n"+"5) Nagini");
 
             int ch=Sc.nextInt();
             String char_name;
@@ -237,21 +238,20 @@ interface user{
 }
 class Customer implements user{
     public ArrayList <item> c_history=new ArrayList<item>();
-    public int money_left;
+    // public int money_left;
     public int orders_total;
     public int orders_current;
     private String name;
     private String address;
     public int c_id;
-//    private int counter=0;
-    public int acc_main;
-    public int acc_reward;
-    public Customer(){
+    public double acc_main;
+    public double acc_reward;
+    // public Customer(){
         
-        orders_total=0;
-        orders_current=0;
-        money_left=100;
-    }
+    //     orders_total=0;
+    //     orders_current=0;
+    //     money_left=100;
+    // }
     public Customer(int c_id, String name,String address){
 
         this.c_id=c_id;
@@ -259,20 +259,20 @@ class Customer implements user{
         this.address=address;
         orders_total=0;
         orders_current=0;
-        money_left=100;
+        acc_main=100;
     }
     @Override
     public void Reward(){
-        if(orders_current>=5){
-            acc_reward+=10;
-            orders_current=orders_total-5;
+        if(this.orders_current>=5){
+            this.acc_reward+=10.0;
+            this.orders_current=this.orders_total-5;
         }
         System.out.println(acc_reward);
             
     }
     
     public void Transaction(ArrayList <item> al_customer){
-         int amt=0;
+        int amt=0;
         for(int i=0;i<al_customer.size();i++){
             amt+=al_customer.get(i).quantity*al_customer.get(i).price;
             if(c_history.size()<10){
@@ -283,8 +283,8 @@ class Customer implements user{
                 c_history.add(al_customer.get(i));
             }
         }
-        Company.account_company=(int)0.01*amt;
-        this.acc_main-=(int)0.5*amt;
+        Company.account_company+=(0.01*amt);
+        this.acc_main-=0.5*amt;
         
         if(amt<=this.acc_main){
          this.acc_main-=amt;
@@ -293,10 +293,15 @@ class Customer implements user{
             this.acc_main=0;
             this.acc_reward-=amt-this.acc_main;
         }
-//        counter+=1;
+
         
         this.orders_current+=1;
         this.orders_total+=1;
+        
+        //CLEAR CART
+//        for(int j=0;j<c_history.size();j++){
+//            c_history.remove(j);
+//        }
     }
     public void Buy(item tobuy){
         int amt=tobuy.price*tobuy.quantity;
@@ -306,10 +311,10 @@ class Customer implements user{
         }
         orders_current+=1;
         orders_total+=1;
-//        c_history.add(tobuy);
-           Company.account_company+=(int)0.01*amt;
-           this.acc_main-=(int)0.5*amt;
-//           tobuy.m_id;
+
+           Company.account_company+=(0.01*amt);
+
+           this.acc_main-=(0.5*amt);
            
         if(c_history.size()<10){
                 c_history.add(tobuy);
@@ -361,18 +366,14 @@ class Customer implements user{
 //        }
         if(option==1) {
             //buy immediately
-//            al_merchant.get(itemcode-1).m_id;
              if(itemquan<= al_merchant.get(itemcode-1).quantity){
                  int price=al_merchant.get(itemcode-1).price;
-//                 System.out.println("price"+price);
-                 
-//                 Merchant abc=new Merchant();
-//                 abc.buy_directly(price,itemquan);
-//                    this.Transaction(al_customer);
+
             item ptr=new item(al_merchant.get(itemcode-1).name,al_merchant.get(itemcode-1).price,itemquan,al_merchant.get(itemcode-1).offer,al_merchant.get(itemcode-1).category,itemcode);
 
                     this.Buy(ptr);
                     al_merchant.get(itemcode-1).quantity-=ptr.quantity;
+                    al_merchant.get(itemcode-1);
 //                         TRANSACTION
              }
             
@@ -404,7 +405,7 @@ class Customer implements user{
 }
 
 class Merchant implements user {
-    public int contri_total;
+    public static int contri_total;
     public int contri_current;
     public int slots;
     private String name;
@@ -443,10 +444,10 @@ class Merchant implements user {
 */
     @Override
     public void Reward(){
-        if(contri_total>=100){
-            slots+=1;
+        if(this.contri_total>=100){
+            this.slots+=1;
         }
-        System.out.println("extra slots are "+(slots-10));
+        System.out.println("extra slots are "+(this.slots-10));
     }
     @Override
     public void search(ArrayList<item> al_merchant,ArrayList<item> al_customer,String char_name){
@@ -502,9 +503,9 @@ class item{
     
 }
 class Company{
-    public static int account_company;
-    public Company(){
-        account_company=0;
-    }
+    public static double account_company=0;
+//    public Company(){
+//        
+//     }
 }
 
